@@ -1,0 +1,23 @@
+{
+  "name": "leave-management-system",
+  "version": "1.0.0",
+  "description": "Leave Management System with user and admin login",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-mongodb-session": "^3.1.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongodb": "^5.9.0",
+    "mongoose": "^7.5.0",
+    "pdfkit": "^0.17.2",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

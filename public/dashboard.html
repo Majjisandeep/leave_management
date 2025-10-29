@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Leave Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .leave-history {
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .balance {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+        }
+        .logout {
+            float: right;
+            background-color: #f44336;
+        }
+        .logout:hover {
+            background-color: #da190b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="logout" onclick="logout()">Logout</button>
+        <h1>User Dashboard</h1>
+        
+        <div class="balance">
+            <h3>Leave Balance: <span id="leaveBalance">Loading...</span> days</h3>
+        </div>
+
+        <div class="apply-leave">
+            <h2>Apply for Leave</h2>
+            <form id="leaveForm">
+                <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="reason">Reason:</label>
+                    <textarea id="reason" rows="3" required></textarea>
+                </div>
+                <button type="submit">Submit Application</button>
+            </form>
+        </div>
+
+        <div class="leave-history">
+            <h2>Leave History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="leaveHistory"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Fetch leave balance
+        async function fetchLeaveBalance() {
+            try {
+                const response = await fetch('/leave/balance');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('leaveBalance').textContent = data.casualLeaveBalance;
+                }
+            } catch (error) {
+                console.error('Error fetching leave balance:', error);
+            }
+        }
+
+        // Fetch leave history
+        async function fetchLeaveHistory() {
+            try {
+                const response = await fetch('/leave/history');
+                if (response.ok) {
+                    const leaves = await response.json();
+                    const tbody = document.getElementById('leaveHistory');
+                    tbody.innerHTML = leaves.map(leave => `
+                        <tr>
+                            <td>${new Date(leave.startDate).toLocaleDateString()}</td>
+                            <td>${new Date(leave.endDate).toLocaleDateString()}</td>
+                            <td>${leave.reason}</td>
+                            <td>${leave.status}</td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error fetching leave history:', error);
+            }
+        }
+
+        // Handle leave application
+        // Set min date for date inputs
+        function setMinDates() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').min = today;
+            document.getElementById('endDate').min = today;
+        }
+
+        // Update end date min value when start date changes
+        document.getElementById('startDate').addEventListener('change', function() {
+            document.getElementById('endDate').min = this.value;
+        });
+
+        document.getElementById('leaveForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const reason = document.getElementById('reason').value;
+            
+            // Client-side date validation
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (start < today) {
+                alert('Start date cannot be in the past');
+                return;
+            }
+
+            if (end < start) {
+                alert('End date must be after start date');
+                return;
+            }
+
+            try {
+                const response = await fetch('/leave/apply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ startDate, endDate, reason })
+                });
+
+                if (response.ok) {
+                    alert('Leave application submitted successfully');
+                    document.getElementById('leaveForm').reset();
+                    fetchLeaveHistory();
+                    fetchLeaveBalance();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to submit leave application');
+                }
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+            }
+        });
+
+        // Logout function
+        async function logout() {
+            try {
+                const response = await fetch('/auth/logout', { method: 'POST' });
+                if (response.ok) {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error logging out:', error);
+            }
+        }
+
+        // Initialize dashboard
+        setMinDates();
+        fetchLeaveBalance();
+        fetchLeaveHistory();
+    </script>
+</body>
+</html>
