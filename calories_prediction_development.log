@@ -1,2 +1,3 @@
 2025-12-03 09:12:00 -> CaloriesPrediction: Initialize repository and project structure
 2025-12-03 14:28:00 -> CaloriesPrediction: Add raw calories dataset files
+2025-12-06 10:05:00 -> CaloriesPrediction: Create data loading utilities
