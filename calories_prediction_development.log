@@ -4,3 +4,4 @@
 2025-12-09 11:47:00 -> CaloriesPrediction: Perform initial dataset inspection
 2025-12-09 15:32:00 -> CaloriesPrediction: Generate descriptive statistics report
 2025-12-09 18:04:00 -> CaloriesPrediction: Document dataset observations
+2025-12-12 09:41:00 -> CaloriesPrediction: Handle missing values in training data
