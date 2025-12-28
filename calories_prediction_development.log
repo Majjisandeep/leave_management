@@ -11,3 +11,4 @@
 2025-12-18 17:26:00 -> CaloriesPrediction: Study feature-target relationships
 2025-12-22 11:05:00 -> CaloriesPrediction: Implement feature scaling pipeline
 2025-12-22 14:33:00 -> CaloriesPrediction: Encode categorical attributes
+2025-12-28 10:11:00 -> CaloriesPrediction: Create train-test split workflow
