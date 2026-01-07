@@ -14,3 +14,4 @@
 2025-12-28 10:11:00 -> CaloriesPrediction: Create train-test split workflow
 2026-01-03 09:29:00 -> CaloriesPrediction: Train baseline linear regression model
 2026-01-03 15:44:00 -> CaloriesPrediction: Evaluate baseline model metrics
+2026-01-07 10:17:00 -> CaloriesPrediction: Implement decision tree regressor
