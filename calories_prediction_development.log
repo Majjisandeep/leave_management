@@ -18,3 +18,4 @@
 2026-01-07 13:58:00 -> CaloriesPrediction: Compare model performance results
 2026-01-07 18:21:00 -> CaloriesPrediction: Store experiment outputs
 2026-01-11 09:36:00 -> CaloriesPrediction: Train random forest regression model
+2026-01-14 11:15:00 -> CaloriesPrediction: Add hyperparameter tuning workflow
