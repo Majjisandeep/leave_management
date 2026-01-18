@@ -20,3 +20,4 @@
 2026-01-11 09:36:00 -> CaloriesPrediction: Train random forest regression model
 2026-01-14 11:15:00 -> CaloriesPrediction: Add hyperparameter tuning workflow
 2026-01-14 16:52:00 -> CaloriesPrediction: Improve validation metrics reporting
+2026-01-18 08:55:00 -> CaloriesPrediction: Generate feature importance charts
