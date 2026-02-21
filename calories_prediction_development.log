@@ -34,3 +34,4 @@
 2026-02-15 17:03:00 -> CaloriesPrediction: Add loading indicators for requests
 2026-02-15 20:11:00 -> CaloriesPrediction: Polish prediction result display
 2026-02-21 09:58:00 -> CaloriesPrediction: Add unit tests for prediction pipeline
+2026-02-21 13:20:00 -> CaloriesPrediction: Fix validation edge cases
